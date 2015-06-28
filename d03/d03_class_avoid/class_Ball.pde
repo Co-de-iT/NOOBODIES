@@ -40,7 +40,7 @@ class Ball {
     // bounce();
 
     // 3. display
-    displayTri();
+    //displayTri();
     //display();
     //display2();
     //display3();

@@ -24,7 +24,7 @@ void setup() {
   //.....
   size(800, 800, P3D);
   cam = new PeasyCam(this,-180,180,0, 800);
-  frameRate(30);
+  //frameRate(30);
 
   // init curves
   curves = new ArrayList();

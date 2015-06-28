@@ -1,13 +1,13 @@
 
 import toxi.geom.*;
-
+import processing.dxf.*;
 
 // this is a single line comment
 // variables declaration
-
+boolean recDxf = false;
 int sizeX = 900;
 int sizeY = 700;
-int nBalls = 200;
+int nBalls = 0;
 float xPos = 300;
 float yPos = sizeY/2; // in the middle of the canvas
 float speed = 1.5;
@@ -38,6 +38,9 @@ void setup() {
 }
 
 void draw() {
+  if (recDxf == true) {
+    beginRaw(DXF, "dxfOut/lines.dxf");
+  }
   background(221);
   // 
 
@@ -46,20 +49,26 @@ void draw() {
     b.update();       // call its update() function
   }
   color a = color(#D3E029, 60);
-  color b = color(#4B0B40, 60);
+  color b = color(0, 60);
   for (int i=0; i< lColl.size (); i++) {
     float r = i/(float)lColl.size();
     Line l = lColl.get(i);
     l.display(1, lerpColor(a, b, r));
   }
+
+  if (recDxf==true) {
+    endRaw();
+    recDxf = false;
+    println("DXF file saved");
+  }
 }
 
 // ..........................................................................................................
 
-void mousePressed() {
+void mouseDragged() {
   if (mouseButton==LEFT) {
     Vec3D loc = new Vec3D(mouseX, mouseY, 0);
-    b = new Ball(loc, random(5,50), color(random(255), 0, 0, random(20, 180)));// instantiation
+    b = new Ball(loc, random(5, 50), color(random(255), 0, 0, random(20, 180)));// instantiation
     bColl.add(b); // add to collection
   }
 }
