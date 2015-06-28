@@ -33,13 +33,15 @@ class Ball {
     acc = new Vec3D();
 
     // 2. move
-    if (avoid(bColl)) move();
+    //if (avoid(bColl)) move();
+    avoid(bColl);
+    //shrink();
     //wrap();
     // bounce();
 
     // 3. display
-    //displayTri();
-    display();
+    displayTri();
+    //display();
     //display2();
     //display3();
   }
@@ -51,10 +53,19 @@ class Ball {
         check=true;
         //vel.rotateX(random(-1, 1));
         //vel.rotateY(random(-1, 1));
-        vel.rotateZ(random(-1, 1));
+        vel.rotateZ(random(-.1, .1));
+        move();
+        shrink();
+        Line l = new Line(loc.copy(), other.loc.copy());
+        // Line l = new Line(new Vec3D(loc), new Vec3D(other.loc));
+        lColl.add(l);
       }
     }
     return check;
+  }
+
+  void shrink() {
+    if (rad > 3) rad = rad - 0.1;
   }
 
   void flock(ArrayList <Ball> bColl) {
