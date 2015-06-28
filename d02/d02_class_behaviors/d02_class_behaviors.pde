@@ -5,9 +5,9 @@ import toxi.geom.*;
 // this is a single line comment
 // variables declaration
 
-int sizeX = 800;
-int sizeY = 800;
-int nBalls = 500;
+int sizeX = 900;
+int sizeY = 700;
+int nBalls = 200;
 float xPos = 300;
 float yPos = sizeY/2; // in the middle of the canvas
 float speed = 1.5;
@@ -27,7 +27,7 @@ void setup() {
 
   // a = a+1; <> a +=1; <> a++;
   for (int i=0; i<nBalls; i++) {
-    float r = random(5, 60);
+    float r = random(5, 10);
     Vec3D loc = new Vec3D(random(r, width-r), random(r, height-r), 0);
     b = new Ball(loc, r, color(random(255), 0, 0, random(20, 180)));// instantiation
     bColl.add(b); // add to collection
@@ -41,18 +41,8 @@ void draw() {
   for (int i=0; i< bColl.size (); i++) {
     b = bColl.get(i); // pick the i-th element of the collection
     b.update();       // call its update() function
-    b.check(bColl);
+ 
   }
 }
+
 // ..........................................................................................................
-//
-//  example of a function returning values (not used by the sketch)
-//
-// <function type> <function name> ( <param type> <param name>,...){ <instructions> }
-float moveY(float y) {
-  float newY;
-  newY = height/2+sin(frameCount*0.1)*100;
-  // if a function returns a value it must contain the 'return' instruction
-  // the returned value must be of the same type of the function
-  return newY;
-}

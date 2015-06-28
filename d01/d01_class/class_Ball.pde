@@ -14,7 +14,7 @@ class Ball {
     rad = _rad;
     col = _col;
     vel = new Vec3D(random(-2, 2), random(-2, 2), 0);
-    period = 1/random(2,50);
+    period = 1/random(2, 50);
   }
 
   // behaviors
@@ -24,13 +24,36 @@ class Ball {
     bounce();
     //display();
     //display2();
-    display3();
+    //display3();
   }
 
   // moving behaviors
   void move() {
     loc.addSelf(vel);
   }
+
+  void check(ArrayList<Ball> bColl) {
+    Ball b1;
+    int i = bColl.indexOf(this);
+    pushStyle();
+    for (int j=i+1; j<bColl.size (); j++) {
+      b1 = bColl.get(j);
+      if (checkOverlap(b1)) {
+        stroke(0, 80);
+        strokeWeight(1);
+        line(loc.x, loc.y, loc.z, b1.loc.x, b1.loc.y, b1.loc.z);
+      }
+    }
+    popStyle();
+  }
+
+
+  // neighbour checking
+
+  boolean checkOverlap(Ball other) {
+    return (loc.distanceTo(other.loc) < (rad+other.rad));
+  }
+
 
   // border checking b.
   void wrap() {
@@ -53,10 +76,10 @@ class Ball {
     // || or
     // && and
     // != not
-    if (loc.x-rad<0 || loc.x+rad > width){
+    if (loc.x-rad<0 || loc.x+rad > width) {
       vel.x *= -1;
     }
-     if (loc.y-rad<0 || loc.y+rad > height){
+    if (loc.y-rad<0 || loc.y+rad > height) {
       vel.y *= -1; // vel.y = vel.y * -1;
     }
   }
@@ -67,15 +90,15 @@ class Ball {
     fill(col);
     ellipse(loc.x, loc.y, rad*2, rad*2);
   }
-  
-  void display2(){
+
+  void display2() {
     noFill();
     stroke(col);
     strokeWeight(5);
     ellipse(loc.x, loc.y, rad*2, rad*2);
   }
-  
-  void display3(){
+
+  void display3() {
     noStroke();
     fill(col);
     float x1=loc.x+cos(frameCount*period)*rad*2/3;
@@ -85,6 +108,5 @@ class Ball {
     stroke(col);
     strokeWeight(5);
     ellipse(loc.x, loc.y, rad*2, rad*2);
-  
   }
 }
