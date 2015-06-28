@@ -25,23 +25,36 @@ class Ball {
   void update() {
     // 1. calculate influences
     //check(bColl);
-    seekMouse(200);
-    flock(bColl);
-    
+    //seekMouse(200);
+    //flock(bColl);
+
     vel.addSelf(acc);
     vel.limit(maxSpeed); 
     acc = new Vec3D();
 
     // 2. move
-    move();
-    wrap();
+    if (avoid(bColl)) move();
+    //wrap();
     // bounce();
 
     // 3. display
-    displayTri();
-    //display();
+    //displayTri();
+    display();
     //display2();
     //display3();
+  }
+
+  boolean avoid(ArrayList<Ball> bColl) {
+    boolean check = false;
+    for (Ball other : bColl) {
+      if (this!=other && checkOverlap(other)) {
+        check=true;
+        //vel.rotateX(random(-1, 1));
+        //vel.rotateY(random(-1, 1));
+        vel.rotateZ(random(-1, 1));
+      }
+    }
+    return check;
   }
 
   void flock(ArrayList <Ball> bColl) {
@@ -49,13 +62,12 @@ class Ball {
     Vec3D separation = separate(bColl);
     // alignment
     // cohesion
-    
+
     // adjust influence values
-    
-    
+
+
     // add to acceleration
     applyForce(separation);
-    
   }
 
 
@@ -65,21 +77,21 @@ class Ball {
     int count=0;
     for (Ball other : bColl) {
       float d = loc.distanceTo(other.loc);
-      if (d>0 && d < sepR){
-      // calc UNdesired vector
-      Vec3D diff = loc.sub(other.loc);
-      diff.normalizeTo(1/d);   // the closest I am, the more violent the response
-      steer.addSelf(diff);     // add to steer
-      count++;
+      if (d>0 && d < sepR) {
+        // calc UNdesired vector
+        Vec3D diff = loc.sub(other.loc);
+        diff.normalizeTo(1/d);   // the closest I am, the more violent the response
+        steer.addSelf(diff);     // add to steer
+        count++;
       }
     }
     // Average steer vector
     if (count > 0) steer.scaleSelf(1/(float)count);
     // if steer is > 0
-    if (steer.magnitude() > 0){
-    steer.normalizeTo(maxSpeed);
-    steer.subSelf(vel);
-    steer.limit(maxForce);
+    if (steer.magnitude() > 0) {
+      steer.normalizeTo(maxSpeed);
+      steer.subSelf(vel);
+      steer.limit(maxForce);
     }
     return steer;
   }
@@ -98,7 +110,7 @@ class Ball {
     float d = loc.distanceTo(mouse);
     if (mousePressed && mouseButton==LEFT && d < thres) {
       Vec3D m = seek(mouse);
-      
+
       applyForce(m);
     }
   }
@@ -129,7 +141,7 @@ class Ball {
   // neighbour checking
 
   boolean checkOverlap(Ball other) {
-    return (loc.distanceTo(other.loc) < (rad+other.rad));
+    return (loc.distanceToSquared(other.loc) < (rad+other.rad)*(rad+other.rad));
   }
 
   boolean flee(Ball other) {

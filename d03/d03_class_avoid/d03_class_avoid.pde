@@ -7,7 +7,7 @@ import toxi.geom.*;
 
 int sizeX = 900;
 int sizeY = 700;
-int nBalls = 200;
+int nBalls = 100;
 float xPos = 300;
 float yPos = sizeY/2; // in the middle of the canvas
 float speed = 1.5;
@@ -27,7 +27,7 @@ void setup() {
 
   // a = a+1; <> a +=1; <> a++;
   for (int i=0; i<nBalls; i++) {
-    float r = random(5, 10);
+    float r = random(15, 40);
     Vec3D loc = new Vec3D(random(r, width-r), random(r, height-r), 0);
     b = new Ball(loc, r, color(random(255), 0, 0, random(20, 180)));// instantiation
     bColl.add(b); // add to collection
