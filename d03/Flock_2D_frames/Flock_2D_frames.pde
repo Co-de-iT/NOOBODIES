@@ -31,6 +31,7 @@ import peasy.*;
 
 ArrayList <Ple_Agent> boids;
 ArrayList <Frame> frames;
+ArrayList<Trail> trails;
 
 //using peasycam
 PeasyCam cam;
@@ -39,9 +40,9 @@ float DIMX = 600;
 float DIMY = 600;
 float DIMZ = 600;
 float z = 0;
-float incZ = 50;
+float incZ = 20;
 
-int pop = 800;
+int pop = 400;
 
 void setup() {
   size(1200, 600, OPENGL);
@@ -50,6 +51,7 @@ void setup() {
 
   //initialize the arrayList
   boids = new ArrayList <Ple_Agent>();
+  trails = new ArrayList<Trail>();
   frames = new ArrayList <Frame> ();
 
   for (int i = 0; i < pop; i++) {
@@ -70,6 +72,10 @@ void setup() {
 
     //add the agents to the list
     boids.add(pa);
+    // use custom trails
+    Trail t = new Trail();
+    //t.points.add(pa.loc.copy());
+    trails.add(t);
   }
 }
 
@@ -86,7 +92,7 @@ void draw() {
     //call flock, cohesion, alignment, separation.
     //first define the population, then the distances for cohesion,alignment, 
     //separation and then the scales in same order. Try playing with the scales and distances!
-    pa.flock(boids, 220, 40, 10,  5, 0.5, 10);
+    pa.flock(boids, 90, 40, 10, 1.5, 0.5, 10);
 
     //define the boundries of the space as bounce
     pa.bounceSpace(DIMX/2, DIMY/2, DIMY/2);
@@ -117,14 +123,19 @@ void draw() {
     strokeWeight(1);
     stroke(100, 90);
     pa.displayDir(pa.vel.magnitude()*3);
+    
+   // Display agent trail
+   trails.get(boids.indexOf(pa)).display();
   }
 
-  if (frameCount > 100 && frameCount < 200 && frameCount%10==0) {
+  if (frameCount > 100 && frameCount < 500 && frameCount%10==0) {
     Frame f = new Frame();
     f.record(boids);
     f.connect();
     frames.add(f);
     z += incZ;
+    // record & display agent's trail
+    for (Ple_Agent pa : boids) trails.get(boids.indexOf(pa)).points.add(pa.loc.copy());
   }
 
   for (Frame f : frames) {

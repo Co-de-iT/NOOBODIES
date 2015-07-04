@@ -2,7 +2,7 @@ class Frame {
 
   ArrayList<Vec3D> pts;
   ArrayList<Line> lines;
-  float thres = 20;
+  float thres = 15;
 
   Frame() {
     pts = new ArrayList<Vec3D>();
